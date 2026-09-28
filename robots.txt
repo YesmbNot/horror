@@ -1,0 +1,5 @@
+# WKVN-TV web server
+# g.ortiz: keep the crawlers out of the engineering log. nobody else needs to read it.
+User-agent: *
+Disallow: /transmitter-room
+Disallow: /tapes/333
