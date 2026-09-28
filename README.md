@@ -35,3 +35,10 @@ To add episode 5+: add a line to `RELEASE`, `RULES`, `DALE`, `TAPES`, `MEMOS` (a
 
 ## Link preview with a domain
 Some apps need an absolute image URL. After adding a domain, change `/og.jpg` to `https://your-domain/og.jpg` in the `og:image` and `twitter:image` lines.
+
+## Night Shift (mini-game) — /night-shift
+- Files: `night-shift/index.html`, `night-shift/game.js`, `night-shift/a/*` (pictures + sounds), `api/shift.js` (results), `og-shift.jpg` (link preview).
+- Nights unlock by the same dates. **When you change `RELEASE` in `index.html`, change it in `night-shift/game.js` too.**
+- Results are stored in Upstash: keys `shift:1`, `shift:2`… (hash: result → count). End screen shows "X% of engineers didn't make it".
+- Test locally: `npx serve .` then open `http://localhost:3000/night-shift?all&fast` (all nights, 5x speed). These flags work only on localhost.
+- Links to the game: "Night Shift" button on the home page, `/transmitter-room` log, 404 page `/shift`.

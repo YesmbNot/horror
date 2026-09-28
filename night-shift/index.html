@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>WKVN Night Shift</title>
+<meta name="description" content="You are the night engineer at WKVN Channel 9. Keep the station on the air until 6:00 AM. Follow the overnight safety instructions.">
+<meta name="theme-color" content="#000000">
+<meta property="og:site_name" content="WKVN-TV Channel 9">
+<meta property="og:title" content="WKVN Night Shift">
+<meta property="og:description" content="Keep the station on the air until 6:00 AM. Do not count the knocks.">
+<meta property="og:image" content="/og-shift.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="/og-shift.jpg">
+<link rel="icon" href="/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&display=swap">
+<style>
+:root{
+  --bg:#050605; --panel:#0b0e0c; --line:#1d2a21; --fg:#b8f5c4; --dim:#5e8a69; --faint:#2c4033;
+  --amber:#ffc24a; --red:#ff4545; --white:#e9ece9;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--fg);font-family:"VT323","Courier New",monospace;font-size:20px;line-height:1.25}
+body{min-height:100vh;min-height:100dvh;overflow-x:hidden}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:var(--fg)}
+.wrap{max-width:520px;margin:0 auto;padding:10px 12px 28px}
+[hidden]{display:none!important}
+
+/* ---------- screens ---------- */
+.screen{position:fixed;inset:0;z-index:40;background:var(--bg);overflow-y:auto;display:flex;justify-content:center}
+.screen .inner{width:100%;max-width:520px;padding:28px 16px 40px}
+.logo{width:88px;height:88px;border-radius:50%;display:block;margin:6px auto 12px;filter:saturate(.8) contrast(1.1)}
+h1{font-weight:400;font-size:64px;line-height:.95;margin:0;text-align:center;letter-spacing:.02em;color:var(--white)}
+.sub{color:var(--dim);text-align:center;margin:6px 0 18px;letter-spacing:.06em}
+.txt{color:var(--fg);margin:10px 0}
+.txt.dim{color:var(--dim)}
+.nights{list-style:none;padding:0;margin:18px 0}
+.nights li{margin:8px 0}
+.nbtn{width:100%;display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);padding:12px 14px;text-align:left;font-size:22px}
+.nbtn:hover:not(:disabled){border-color:var(--fg)}
+.nbtn:disabled{color:var(--faint);cursor:default}
+.nbtn .st{font-size:18px;color:var(--dim);text-align:right}
+.nbtn .ok{color:var(--fg)}
+.big{display:block;width:100%;background:var(--fg);color:#031006;border:0;padding:14px;font-size:26px;letter-spacing:.06em;margin-top:14px}
+.big.ghost{background:transparent;color:var(--fg);border:1px solid var(--fg)}
+.big.red{background:var(--red);color:#1a0000}
+.typed{white-space:pre-wrap;min-height:7.5em;color:var(--fg);font-size:22px}
+.warn{color:var(--amber)}
+.small{font-size:17px;color:var(--dim)}
+
+/* ---------- game ---------- */
+.hud{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:6px;margin-bottom:8px}
+.hud .n{color:var(--dim);font-size:18px;letter-spacing:.05em}
+.hud .clock{font-size:34px;color:var(--white);letter-spacing:.04em}
+.mon{position:relative;aspect-ratio:3/4;max-height:56vh;max-height:56dvh;margin:0 auto;background:#000;border:2px solid #1a1f1b;border-radius:10px;overflow:hidden;box-shadow:inset 0 0 40px #000,0 0 0 4px #0c0f0d}
+.mon img,.mon video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:contrast(1.08) saturate(.75) brightness(1.06)}
+.mon .fx{position:absolute;inset:0;pointer-events:none}
+.scan{background:repeating-linear-gradient(transparent 0 2px,rgba(0,0,0,.28) 2px 3px);mix-blend-mode:multiply}
+.vig{background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.65) 100%)}
+#noise{position:absolute;inset:0;width:100%;height:100%;opacity:.13;mix-blend-mode:screen;pointer-events:none;image-rendering:pixelated}
+.lbl{position:absolute;left:10px;top:8px;font-size:18px;color:var(--white);text-shadow:0 0 4px #000,1px 1px 0 #000;letter-spacing:.05em}
+.rec{position:absolute;right:10px;top:8px;font-size:18px;color:var(--red);text-shadow:1px 1px 0 #000}
+.rec::before{content:"\25CF ";animation:blink 1.2s steps(2) infinite}
+.ts{position:absolute;left:10px;bottom:8px;font-size:17px;color:var(--white);text-shadow:1px 1px 0 #000;opacity:.85}
+@keyframes blink{50%{opacity:0}}
+.curtain{position:absolute;inset:0;background:
+  repeating-linear-gradient(90deg,#1b1714 0 18px,#2a241f 30px,#15120f 46px,#221d19 60px);display:flex;align-items:center;justify-content:center;color:var(--dim);font-size:18px;letter-spacing:.1em}
+.fog{position:absolute;inset:-20%;pointer-events:none;background:radial-gradient(ellipse at 30% 60%,rgba(200,205,210,.2),transparent 60%),radial-gradient(ellipse at 70% 40%,rgba(200,205,210,.16),transparent 55%);animation:fog 14s ease-in-out infinite alternate;filter:blur(6px)}
+@keyframes fog{from{transform:translateX(-6%)}to{transform:translateX(6%)}}
+.ch9{position:absolute;inset:0;background:#08124a;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:22px;color:#fff}
+.ch9 .cardt{font-size:30px;line-height:1.1;text-shadow:2px 2px 0 #000;max-width:95%}
+.ch9 .foot{position:absolute;bottom:34px;left:0;right:0;font-size:14px;color:#c9cff7;letter-spacing:.08em}
+.ch9.off{background:#000}
+.cap{position:absolute;left:8px;right:8px;bottom:34px;background:rgba(0,0,0,.82);color:var(--white);padding:6px 10px;font-size:20px;text-align:center;border:1px solid #333}
+.cap .who{color:var(--amber);font-size:16px;display:block;letter-spacing:.08em}
+.shake{animation:shake .12s linear 2}
+@keyframes shake{25%{transform:translate(3px,-2px)}50%{transform:translate(-3px,2px)}75%{transform:translate(2px,1px)}}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0 6px}
+.tab{background:var(--panel);border:1px solid var(--line);padding:9px 4px;font-size:20px;letter-spacing:.04em;position:relative}
+.tab.on{border-color:var(--fg);color:var(--white);background:#0f1712}
+.tab.glow{box-shadow:0 0 0 1px var(--amber) inset;color:var(--amber)}
+.acts{display:flex;gap:6px;min-height:46px;margin-bottom:8px}
+.act{flex:1;background:#140c0c;border:1px solid #3a1d1d;color:#f3c9c9;padding:10px 6px;font-size:19px}
+.act.safe{background:var(--panel);border-color:var(--line);color:var(--fg)}
+.act.hot{border-color:var(--amber);color:var(--amber)}
+.row{display:flex;align-items:center;gap:8px}
+.panel{background:var(--panel);border:1px solid var(--line);padding:8px 10px;margin:6px 0}
+.meter{flex:1;height:18px;border:1px solid var(--faint);background:#020302;position:relative}
+.meter i{position:absolute;left:0;top:0;bottom:0;background:var(--fg);transition:width .15s linear}
+.meter.low i{background:var(--red)}
+.lab{font-size:18px;color:var(--dim);letter-spacing:.06em;min-width:74px}
+.adj{background:#0f1712;border:1px solid var(--fg);padding:6px 12px;font-size:20px;color:var(--fg)}
+.adj:active{background:var(--fg);color:#000}
+.led{width:10px;height:10px;border-radius:50%;background:#222;display:inline-block;margin-right:6px}
+.led.on{background:var(--red);animation:blink .5s steps(2) infinite}
+.phone .st{flex:1;font-size:19px}
+.phone .pbtn{background:#0f1712;border:1px solid var(--line);padding:6px 10px;font-size:19px}
+.tr{font-size:19px;color:var(--white);min-height:1.2em;margin-top:4px;white-space:pre-wrap}
+.log{font-size:17px;color:var(--dim);min-height:3.8em;white-space:pre-wrap}
+.log b{color:var(--fg);font-weight:400}
+
+/* modal + overlays */
+.modal{position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;padding:16px}
+.sheet{width:100%;max-width:440px;background:#0a0d0b;border:1px solid var(--fg);padding:16px}
+.sheet h3{font-weight:400;font-size:24px;margin:0 0 6px;color:var(--white)}
+.sheet input{font:inherit;font-size:28px;width:100%;background:#000;color:var(--white);border:1px solid var(--faint);padding:8px 10px;margin:8px 0}
+.sheet .bar{height:3px;background:var(--faint);margin-top:10px;position:relative;overflow:hidden}
+.sheet .bar i{position:absolute;left:0;top:0;bottom:0;background:var(--amber)}
+.jump{position:fixed;inset:0;z-index:60;background:#000;display:flex;align-items:center;justify-content:center}
+.jump img{width:min(100vw,100vh);height:min(100vw,100vh);object-fit:cover;animation:jz .9s ease-out forwards}
+@keyframes jz{from{transform:scale(1.35)}to{transform:scale(1)}}
+.flash{position:fixed;inset:0;z-index:55;background:#fff;pointer-events:none;opacity:0}
+.end h1{font-size:54px}
+.end .cause{color:var(--red);text-align:center;font-size:30px;margin:10px 0 2px}
+.end .rule{text-align:center;color:var(--dim);margin:0 0 14px}
+.stat{border:1px solid var(--line);background:var(--panel);padding:12px;margin:14px 0;text-align:center;font-size:22px}
+.stat b{display:block;font-size:44px;font-weight:400;color:var(--white)}
+.endimg{width:100%;aspect-ratio:3/2;object-fit:cover;border:1px solid var(--line);filter:contrast(1.1) saturate(.7);display:block;margin:10px 0}
+.win h1{color:var(--fg)}
+@media (prefers-reduced-motion:reduce){.shake{animation:none}.fog{animation:none}.jump img{animation:none}}
+@media (min-width:700px){.wrap{padding-top:20px}}
+</style>
+</head>
+<body>
+<!-- WKVN-TV terminal 2. g.ortiz's shift, as he left it. -->
+
+<!-- TITLE -->
+<div class="screen" id="sTitle">
+  <div class="inner">
+    <img class="logo" src="/night-shift/a/logo.jpg" alt="WKVN Channel 9 logo">
+    <h1>NIGHT SHIFT</h1>
+    <div class="sub">WKVN-TV &middot; TRANSMITTER ROOM &middot; TERMINAL 2</div>
+    <p class="txt">You are Gene Ortiz, night engineer at WKVN Channel 9. Keep the station on the air until 6:00 AM.</p>
+    <p class="txt">Channel 9 broadcasts overnight safety instructions at 3:33 AM. Follow them. You are not an exception.</p>
+    <ul class="nights" id="nights"></ul>
+    <p class="small">&#127911; Headphones on. Sound is part of it.</p>
+    <p class="small"><a href="/">&lt; WKVN home page</a> &middot; <a href="https://www.tiktok.com/@wkvn9" target="_blank" rel="noopener">Broadcasts on TikTok</a></p>
+  </div>
+</div>
+
+<!-- BRIEFING -->
+<div class="screen" id="sBrief" hidden>
+  <div class="inner">
+    <div class="sub" id="bHead">ENGINEERING LOG</div>
+    <div class="typed" id="bText"></div>
+    <p class="txt warn" id="bWarn"></p>
+    <button class="big" id="bGo">BEGIN SHIFT</button>
+    <a class="big ghost" id="bWatch" href="https://www.tiktok.com/@wkvn9" target="_blank" rel="noopener" style="text-align:center;text-decoration:none">WATCH THE BROADCAST FIRST</a>
+    <p class="small" style="margin-top:14px"><a href="#" id="bBack">&lt; back</a></p>
+  </div>
+</div>
+
+<!-- GAME -->
+<div class="wrap" id="game" hidden>
+  <div class="hud"><span class="n" id="hN">NIGHT 1 &middot; KNOCKING</span><span class="clock" id="hClock">03:33 AM</span></div>
+
+  <div class="mon" id="mon">
+    <img id="feed" src="/night-shift/a/cam1.jpg" alt="">
+    <video id="wave" src="/night-shift/a/wave.mp4" muted playsinline loop preload="auto" hidden></video>
+    <div class="curtain" id="curtain" hidden>CURTAINS CLOSED</div>
+    <div class="fog" id="fog" hidden></div>
+    <div class="ch9" id="ch9" hidden><div class="cardt" id="ch9t"></div><div class="foot" id="ch9f">WKVN CHANNEL 9 &middot; OVERNIGHT SAFETY</div></div>
+    <canvas id="noise" width="120" height="160"></canvas>
+    <div class="fx scan"></div><div class="fx vig"></div>
+    <div class="lbl" id="mLbl">CAM 1 &middot; FRONT WALK</div>
+    <div class="rec">REC</div>
+    <div class="ts" id="mTs">OCT 13 1994 03:33:00</div>
+    <div class="cap" id="cap" hidden><span class="who" id="capWho"></span><span id="capTxt"></span></div>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab on" data-v="cam" role="tab">CAM 1</button>
+    <button class="tab" data-v="win" role="tab">WINDOW</button>
+    <button class="tab" data-v="ch9" role="tab">CH 9</button>
+  </div>
+  <div class="acts" id="acts"></div>
+
+  <div class="panel row"><span class="lab">CARRIER</span><div class="meter" id="meter"><i id="meterI" style="width:80%"></i></div><button class="adj" id="adj" aria-label="Adjust carrier">ADJUST &#9650;</button></div>
+
+  <div class="panel phone">
+    <div class="row"><span class="lab"><span class="led" id="led"></span>EXT 9</span><span class="st" id="pSt">idle</span><span id="pBtns" class="row"></span></div>
+    <div class="tr" id="pTr"></div>
+  </div>
+
+  <div class="panel log" id="log"></div>
+</div>
+
+<!-- LOG PROMPT -->
+<div class="modal" id="mLog" hidden>
+  <div class="sheet">
+    <h3 id="lgH">ENGINEERING LOG</h3>
+    <div class="txt" id="lgQ">Knocking at the front entrance. Number of knocks:</div>
+    <input id="lgIn" type="number" inputmode="numeric" min="0" max="99" placeholder="__" aria-label="Number of knocks">
+    <div class="row"><button class="big" id="lgOk" style="margin-top:0">LOG IT</button><button class="big ghost" id="lgSkip" style="margin-top:0">LEAVE BLANK</button></div>
+    <div class="bar"><i id="lgBar" style="width:100%"></i></div>
+  </div>
+</div>
+
+<!-- CHOICE PROMPT -->
+<div class="modal" id="mAsk" hidden>
+  <div class="sheet">
+    <h3 id="askH"></h3>
+    <div class="txt" id="askQ"></div>
+    <div id="askB"></div>
+    <div class="bar"><i id="askBar" style="width:100%"></i></div>
+  </div>
+</div>
+
+<div class="jump" id="jump" hidden><img id="jumpImg" src="/night-shift/a/peep.jpg" alt=""></div>
+<div class="flash" id="flash"></div>
+
+<!-- END -->
+<div class="screen end" id="sEnd" hidden>
+  <div class="inner">
+    <h1 id="eH">YOU LET IT IN</h1>
+    <div class="cause" id="eCause"></div>
+    <div class="rule" id="eRule"></div>
+    <img class="endimg" id="eImg" src="/night-shift/a/door.jpg" alt="">
+    <div class="stat" id="eStat" hidden></div>
+    <button class="big" id="eShare">SHARE</button>
+    <a class="big ghost" id="eWatch" href="https://www.tiktok.com/@wkvn9" target="_blank" rel="noopener" style="text-align:center;text-decoration:none">WATCH THE BROADCAST</a>
+    <button class="big ghost" id="eAgain">TRY AGAIN</button>
+    <p class="small" style="text-align:center;margin-top:16px"><a href="#" id="eMenu">all nights</a> &middot; <a href="/">WKVN home page</a></p>
+  </div>
+</div>
+
+<script src="/night-shift/game.js"></script>
+</body>
+</html>
