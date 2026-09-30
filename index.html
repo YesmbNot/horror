@@ -325,7 +325,7 @@ footer{font-family:var(--f-sans);font-size:12px;color:var(--dim);text-align:cent
 var CONFIG = { API_BASE: (location.protocol.indexOf("http")===0 ? location.origin : ""), TAPE_AUDIO: true };
 
 // ---- Episode release times (UTC). Content tagged with an episode appears only after its release.
-var RELEASE = { 1:"2026-09-28T00:00:00Z", 2:"2026-09-28T00:00:00Z", 3:"2026-09-29T17:00:00Z", 4:"2026-09-30T17:00:00Z" };
+var RELEASE = { 1:"2026-09-28T00:00:00Z", 2:"2026-09-28T00:00:00Z", 3:"2026-09-29T17:00:00Z", 4:"2026-09-30T17:00:00Z", 5:"2026-10-01T17:00:00Z" };
 function released(ep){ var t=RELEASE[ep]; return !!t && Date.now()>=Date.parse(t); }
 var LATEST=0; Object.keys(RELEASE).forEach(function(k){ if(released(+k) && +k>LATEST) LATEST=+k; });
 
@@ -441,7 +441,8 @@ var RULES=[
   {ep:1,h:"October 13 \u00b7 Knocking",items:["Do not answer the door.","Do not look through the peephole.","Do not count the knocks.","If you have already counted, the number you counted is how many are inside."]},
   {ep:2,h:"October 14 \u00b7 Windows",items:["Do not look at your neighbors' windows after 3 AM.","If a window across the street is lit, it is not your neighbor who turned on the light.","If someone in that window is waving, close your curtains. Do not wave back.","If you already waved back, it now knows which window is yours."]},
   {ep:3,h:"October 15 \u00b7 Missing",items:["If your name is on the list, you are still at home.","Do not answer anyone who says your name twice."]},
-  {ep:4,h:"October 16 \u00b7 Weather",items:["Visibility is zero. Do not go outside to look at the fog.","Something tall is moving west at walking speed. If it passes your house, do not follow it."]}
+  {ep:4,h:"October 16 \u00b7 Weather",items:["Visibility is zero. Do not go outside to look at the fog.","Something tall is moving west at walking speed. If it passes your house, do not follow it."]},
+  {ep:5,h:"October 17 \u00b7 Bedtime",items:["If Mommy or Daddy comes into your room tonight, ask them the secret word.","If they don't know the word, close your eyes and pretend to be asleep.","Do not open your eyes, even if they lean very close."]}
 ];
 (function(){
   var box=$("rulesBox"), n=1, teased=false, html="";
@@ -476,7 +477,11 @@ var SEED=[
   {ep:3,n:"Linda M.",d:"10/15/94 11:02 PM",m:"Everyone is asleep. The light is on. I'm home. I'm home.",wrong:true},
   {ep:4,n:"Carol (Linden St)",d:"10/16/94 3:58 AM",m:"The fog came right up to the windows. Something walked through it, going west. It was taller than the street lights."},
   {ep:4,n:"WKVN_STAFF",d:"10/16/94 9:00 AM",m:"Weather Watch will return when Hal Brandt returns.",staff:true},
-  {ep:4,n:"h.brandt",d:"10/16/94 3:33 AM",m:"Visibility zero. Wind from the west. I'm right outside, Carol. Open the door and I'll read you the forecast.",wrong:true}
+  {ep:4,n:"h.brandt",d:"10/16/94 3:33 AM",m:"Visibility zero. Wind from the west. I'm right outside, Carol. Open the door and I'll read you the forecast.",wrong:true},
+  {ep:5,n:"Tom & Deb Riley",d:"10/17/94 3:41 AM",m:"Our Katie was up watching the puppet show. Mr. Buttons? Channel 9 hasn't aired Mr. Buttons since 1981. She says he asked her for the secret word."},
+  {ep:5,n:"Marjorie K.",d:"10/17/94 8:15 AM",m:"We made a secret word with the grandkids last night like the puppet said. This morning my grandson asked me for it. I told him. He said that's not it, Grandma."},
+  {ep:5,n:"WKVN_STAFF",d:"10/17/94 9:00 AM",m:"WKVN has not produced children's programming since 1981. The Mr. Buttons puppet is kept in storage. Please do not let children watch after 3 AM.",staff:true},
+  {ep:5,n:"mr.buttons",d:"10/17/94 3:33 AM",m:"Katie, you told me the word. Good girl. Now leave the door open.",wrong:true}
 ];
 function esc(s){ var d=document.createElement("div"); d.textContent=s; return d.innerHTML; }
 function renderPosts(){
@@ -512,6 +517,7 @@ var TAPES={
   "02":{t:"TAPE 02 · OCT 14 1994 · 03:33 AM · WINDOWS",b:"<p><b>Transcript.</b> Tonight, do not look at your neighbors' windows. If a window across the street is lit after three A.M., it is not your neighbor who turned on the light. If someone in that window is waving, close your curtains. Do not wave back. If you already waved back, it now knows which window is yours. Turn off your lights. Stay away from the glass. WKVN will return tomorrow night.</p><p><b>Engineer's note (G.O.):</b> The face in the audio is closer than on tape 01. Dale read this one without the script. There was no script. Ruth says she did not write it.</p>",img:"WINDOW",ep:2,audio:true},
   "03":{t:"TAPE 03 \u00b7 OCT 15 1994 \u00b7 03:33 AM \u00b7 MISSING",b:"<p><b>Transcript.</b> Good evening. Tonight WKVN will read the names of residents reported missing. Martha Keene. Walter Keene. Pete Vance. The Palmer family. Linda Morrow. Hal Brandt. And you. If your name is on the list, you are still at home. Do not answer anyone who says your name twice. WKVN will return tomorrow night. <i>[off microphone, whispered]</i> Dale. Dale. <i>[D. Mercer, off microphone]</i> ...Yes?</p><p><b>Engineer's note (G.O.):</b> The teletype printed the list by itself at 3:31. I counted the names on the paper and on the tape. The tape has one more.</p>",img:"STREET",ep:3,audio:true},
   "04":{t:"TAPE 04 \u00b7 OCT 16 1994 \u00b7 03:33 AM \u00b7 WEATHER",b:"<p><b>Transcript.</b> Here is tonight's forecast for Harlow Valley. Visibility: zero. Wind: from the west, at walking speed. Something tall is moving through the valley toward the station. Do not go outside to look at the fog. If it passes your house, do not follow it. <i>[D. Mercer]</i> Thank you, Hal. ...Hal is still at home. <i>[three knocks, off camera]</i></p><p><b>Engineer's note (G.O.):</b> Hal read this forecast. Hal has not been in the building since the 13th.</p>",img:"CLOSE",ep:4,audio:true}
+  ,"05":{t:"TAPE 05 \u00b7 OCT 17 1994 \u00b7 03:33 AM \u00b7 BEDTIME",b:"<p><b>Transcript.</b> <i>[music box]</i> Hello, boys and girls! It's very, very late. Mommy and Daddy are asleep, but you're not. Are you? Tonight, Mister Buttons will teach you the bedtime rules. If Mommy or Daddy comes into your room tonight, ask them the secret word. If they don't know the word, close your eyes. Pretend you're asleep. And don't open them, even if they lean very, very close. Mommy and Daddy don't know the word. But I do. <i>[D. Mercer]</i> Thank you, Mister Buttons. ...Who is holding him?</p><p><b>Engineer's note (G.O.):</b> Mr. Buttons went off the air in 1981. Walt Pruitt worked him for nine years and took the arm home when he retired. The puppet has been in the prop closet since. I checked the closet at 4 AM. The box is open and the puppet is in it. It is warm.</p>",img:"CLOSE",ep:5,audio:true}
 };
 $("tapeForm").addEventListener("submit", function(e){
   e.preventDefault();
@@ -561,7 +567,8 @@ var MEMOS=[
   {ep:1,pw:"it", title:"MEMO 10/13 · FROM: R. CALLOWAY", body:"Dale, read the instructions exactly as written. Do not improvise. Do not look at the camera longer than you need to. The Office of Civil Readiness will send tomorrow's instructions by courier.\n\nGene: the phones keep ringing from inside the building. Please check the lines."},
   {ep:2,pw:"it wears", title:"MEMO 10/14 · FROM: G. ORTIZ", body:"Ruth, the courier did not come. Dale read tonight's instructions anyway. He had no paper in his hands.\n\nAfter sign-off he stayed at the desk. I asked him where he got the words. He said the station told him. Then he asked me to open the transmitter room door.\n\nI did not open it. He used my voice when he asked the second time."},
   {ep:3,pw:"it wears the", title:"MEMO 10/15 \u00b7 FROM: R. CALLOWAY", body:"Nobody at WKVN wrote tonight's list of missing residents. Gene says the teletype printed it by itself at 3:31. The last line was not a name. It said AND YOU.\n\nLinda Morrow called the station to say she is not missing. She is at home. That is what the list said."},
-  {ep:4,pw:"it wears the voice", title:"MEMO 10/16 \u00b7 FROM: G. ORTIZ", body:"Hal phoned in the forecast tonight. Hal has been missing since the 13th. It was his voice. He knew the barometric pressure.\n\nThen he asked me which door the transmitter room is behind. I told him the wrong door. I think he knows."}
+  {ep:4,pw:"it wears the voice", title:"MEMO 10/16 \u00b7 FROM: G. ORTIZ", body:"Hal phoned in the forecast tonight. Hal has been missing since the 13th. It was his voice. He knew the barometric pressure.\n\nThen he asked me which door the transmitter room is behind. I told him the wrong door. I think he knows."},
+  {ep:5,pw:"it wears the voice of", title:"MEMO 10/17 \u00b7 FROM: R. CALLOWAY", body:"Gene, I want the Buttons puppet out of the building today. Burn it if you have to.\n\nThree families called about the secret word. Every one of them made a word with their children after the broadcast. Every one of the children says their parents got it wrong.\n\nDale asked me who was holding him. I did not have an answer. Nobody was in the studio but Dale."}
 ];
 var fails=0;
 $("staffForm").addEventListener("submit", function(e){
